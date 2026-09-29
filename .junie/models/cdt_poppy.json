@@ -1,0 +1,20 @@
+{
+  "baseUrl": "https://cdt.poppy.ca.gov/api/chat/completions",
+  "id": "Google Gemini 3.7 Flash",
+  "apiType": "OpenAICompletion",
+  "displayName": "CDT Poppy",
+  "providerName": "CDT Poppy",
+  "apiKey": "sk-12630116845d4660859485d13fbee054",
+  "primaryModel": {
+    "id": "Google Gemini 3.7 Flash",
+    "apiType": "OpenAICompletion"
+  },
+  "extraHeaders": {
+    "X-Custom-Source": "SantosAgent",
+    "x-api-key": "MY API KEY"
+  },
+  "fasterModel": {
+    "id": "Google Gemini 3.1 Flash-Lite",
+    "apiType": "OpenAICompletion"
+  }
+}

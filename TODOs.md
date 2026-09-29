@@ -1,0 +1,8 @@
+- [ ] Change parameter name of slider to mention the actual dates
+- [ ] Add parameter groups to hide some of the extra information
+- [ ] Have a parameter option to automatically look up the date of the imagery in the current viewport when the slider changes
+- [ ] Change parameter name of "Keep layer in map" to "Persist current date imagery as a new layer in map"
+- [ ] Make the main tool have the same standard parameters (dropdowns instead of keywords) as the other tools
+- [ ] Hide the extra stepper tools.
+- [ ] Tool help
+- [ ] Request repository from DevSecOps
