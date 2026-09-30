@@ -32,7 +32,7 @@ def get_default_log_path() -> str:
 
 def setup_file_logger(
     log_file_path: Optional[str] = None,
-    level: int = logging.INFO,
+    level: int = logging.DEBUG,
     max_bytes: int = 5 * 1024 * 1024,
     backup_count: int = 3,
     logger_name: str = PACKAGE_LOGGER_NAME,

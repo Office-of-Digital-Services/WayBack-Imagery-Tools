@@ -12,6 +12,9 @@ import re
 import tempfile
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+import urllib.request
+import urllib.parse
+
 try:
     import arcpy
     HAS_ARCPY = True
@@ -1011,9 +1014,6 @@ class MapManager:
             ValueError: If no metadata service URL can be derived for the release.
             RuntimeError: If both direct sublayer query and identify fallback fail.
         """
-        import urllib.request
-        import urllib.parse
-        import json as _json
 
         metadata_url = release.metadata_service_url
         if metadata_url is None:
@@ -1037,7 +1037,7 @@ class MapManager:
             attrs: Dict[str, Any], layer_name_val: Optional[str] = None
         ) -> Dict[str, Any]:
             date_str = None
-            src_date2 = attrs.get("SRC_DATE2")
+            src_date2 = int(attrs.get("SRC_DATE2")/1000) # Esri seems to return milliseconds since epoch rather than seconds and it causes an overflow when put into a datetime object. Divide it by 1000 first.
             if src_date2:
                 raw_date = src_date2
             else:
@@ -1068,19 +1068,21 @@ class MapManager:
             "geometryType": "esriGeometryPoint",
             "inSR": "4326",
             "spatialRel": "esriSpatialRelIntersects",
-            "outFields": "*",
+            "outFields": "SRC_DATE,SRC_RES,SRC_ACC,SAMP_RES,SRC_DESC,MinMapLevel,MaxMapLevel,Nice_Name,SRC_DATE2,NICE_DESC,ReleaseName",
             "returnGeometry": "false",
             "f": "json",
         }
         full_query_url = f"{query_url}?{urllib.parse.urlencode(query_params)}"
-
+        logger.debug(f"Query URL: {full_query_url}")
+        logger.debug(f"Params: {query_params}")
         try:
             req = urllib.request.Request(
                 full_query_url,
                 headers={"User-Agent": "ArcGIS-Pro-Wayback-Imagery-Addin/1.0"},
             )
             with urllib.request.urlopen(req, timeout=timeout) as resp:
-                query_data = _json.loads(resp.read().decode("utf-8"))
+                query_data = json.loads(resp.read().decode("utf-8"))
+                logger.debug(f"Response: {query_data}")
 
             features = query_data.get("features", [])
             if features:
@@ -1133,7 +1135,7 @@ class MapManager:
             headers={"User-Agent": "ArcGIS-Pro-Wayback-Imagery-Addin/1.0"},
         )
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            identify_data = _json.loads(resp.read().decode("utf-8"))
+            identify_data = json.loads(resp.read().decode("utf-8"))
 
         results = identify_data.get("results", [])
         if not results:

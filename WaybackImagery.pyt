@@ -24,8 +24,12 @@ except ImportError:
 from wayback_addin.cache import CacheManager
 from wayback_addin.change_detector import get_local_changes_with_metadata, scale_to_zoom_level
 from wayback_addin.logger import get_logger
-from wayback_addin.map_manager import MapManager
+from wayback_addin import map_manager
 from wayback_addin.models import LocalChangeImageryRelease, WaybackRelease
+
+from six.moves import reload_module as reload
+reload(map_manager)
+from wayback_addin.map_manager import MapManager
 
 logger = get_logger("wayback_addin.toolbox")
 
